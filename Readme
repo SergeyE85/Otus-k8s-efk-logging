@@ -1,53 +1,43 @@
-Репозиторий находится по адресу https://github.com/SergeyE85/users-api-k8s-helm 
+Репозиторий находится по адресу https://github.com/SergeyE85/Otus-k8s-efk-logging
 
 
 Для запуска.
 
 0. В системном файле hosts прописать 127.0.0.1 arch.homework
 
-1. Перейти в users-api чарт.
+1. Перейти в efk-chart чарт.
 
-2. Выполнить команду
+2. Для проверки работы Elasticsearch выполнить
+helm install efk . -n logging --create-namespace
+
+3. kubectl port-forward svc/elasticsearch 9200:9200 -n logging
+
+4. Перейти в users-api чарт.
+
+5. Выполнить команду
 helm install test-release . -n otus-microservices-k8s-deployment-service-ingress-users --create-namespace
 
-3. Выполнить команду для установки СУБД из helm'а
+6. Выполнить команду для установки СУБД из helm'а
 helm install pg-release oci://registry-1.docker.io/bitnamicharts/postgresql --set image.repository=bitnami/postgresql --set global.security.allowInsecureImages=true --set global.postgresql.auth.existingSecret=postgres-credentials --set global.postgresql.auth.secretKeys.adminPasswordKey=POSTGRES_PASSWORD --set global.postgresql.auth.secretKeys.userPasswordKey=POSTGRES_PASSWORD --set global.postgresql.auth.username=postgres --set global.postgresql.auth.database=postgres  --namespace otus-microservices-k8s-deployment-service-ingress-users  --create-namespace
 
-4. Перейти в корень.
+7. Перейти в db-init чарт.
 
-5. Выполнить (с рекомендациями отсюда https://kubernetes.github.io/ingress-nginx/user-guide/monitoring/)
-kubectl create namespace otus-microservices-k8s-deployment-service-ingress-users && helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx/ && helm repo update
-helm install nginx-release ingress-nginx/ingress-nginx --namespace otus-microservices-k8s-deployment-service-ingress-users -f nginx-ingress.yaml --set controller.metrics.enabled=true --set-string controller.podAnnotations."prometheus\.io/scrape"="true" --set-string controller.podAnnotations."prometheus\.io/port"="10254"
-
-6. Перейти в db-init чарт.
-
-7. Выполнить команду
+8. Выполнить команду
 helm install db-test-release . -n otus-microservices-k8s-deployment-service-ingress-users --create-namespace
 
-8. Посмотреть список подов пространства имён otus-microservices-k8s-deployment-service-ingress-users при помощи команды
+9. Посмотреть список подов пространства имён otus-microservices-k8s-deployment-service-ingress-users при помощи команды
 kubectl get pods --namespace otus-microservices-k8s-deployment-service-ingress-users
 
-9. На одном из подов webapi-deployment-users выполнить port-forward командой
+10. На одном из подов webapi-deployment-users выполнить port-forward командой
 kubectl --namespace otus-microservices-k8s-deployment-service-ingress-users port-forward <pod-name> 8080:8000
 
-10. Выполнить команду
+11. Выполнить команду
 minikube tunnel
 
-11. Выполнить команду
+12. Выполнить команду
 minikube addons enable ingress
 
-12. Перейти в директорию prometheus-grafana.
-
-13. Выполнить команды
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm install stack prometheus-community/kube-prometheus-stack -f prometheus.yaml -n otus-microservices-k8s-deployment-service-ingress-users --create-namespace
+13. Перейти в каталог postman
 
 14. Выполнить команду
-kubectl apply -f service-monitor.yaml -n otus-microservices-k8s-deployment-service-ingress-users
-
-15. Выполнить команду (подождав запуска подов; kubectl get svc -n otus-microservices-k8s-deployment-service-ingress-users и kubectl get pods -n otus-microservices-k8s-deployment-service-ingress-users)
-kubectl port-forward service/prometheus-operated 9090 -n otus-microservices-k8s-deployment-service-ingress-users
-
-16. Запустить утилиту нагрузочного тестирования для api по адресу arch.homework:8080
 newman run Otus.postman_collection.json -e OtusUsersApiEnvironment.postman_environment.json
