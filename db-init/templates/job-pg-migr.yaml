@@ -27,7 +27,7 @@ spec:
             echo "PostgreSQL is ready!"
       containers:
       - name: migr-application
-        image: egorovsv85/otususersinitdbconsoleapp:v12.0
+        image: egorovsv85/otususersinitdbconsoleapp:v17.0
         env:
         - name: POSTGRES_PASSWORD
           valueFrom:

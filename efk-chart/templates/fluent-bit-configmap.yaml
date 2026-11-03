@@ -33,7 +33,7 @@ data:
         Logstash_Format On
         Logstash_Prefix logs-fluntbit
         Retry_Limit False
-        Host elasticsearch.logging.svc.cluster.local
+        Host elasticsearch-service.logging.svc.cluster.local
         Port 9200
         Index fluent-bit-logs-%Y.%m.%d
         Suppress_Type_Name On

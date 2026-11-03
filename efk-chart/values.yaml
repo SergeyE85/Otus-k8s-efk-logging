@@ -1,7 +1,7 @@
 namespace: logging
 
 elasticsearch:
-  image: docker.elastic.co/elasticsearch/elasticsearch:9.0.0
+  image: mirror.gcr.io/library/elasticsearch:9.5.3
   replicas: 1
   storage: 1Gi
   resources:
@@ -13,7 +13,7 @@ elasticsearch:
       memory: "1Gi"
 
 kibana:
-  image: docker.elastic.co/kibana/kibana:9.0.0
+  image: mirror.gcr.io/library/kibana:9.5.3
   nodePort: 30001
   resources:
     requests:
@@ -31,7 +31,7 @@ kibana:
     pathType: Prefix
 
 fluentbit:
-  image: fluent/fluent-bit:4.2.3.1-debug
+  image: fluent/fluent-bit:5.1.2
   resources:
     requests:
       cpu: "100m"

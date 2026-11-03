@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: k8s-deployment-service-ingress-webapi-users
-        image: egorovsv85/otususerswebapplication:v25.0
+        image: egorovsv85/otususerswebapplication:v30.0
         env:
         - name: POSTGRES_PASSWORD
           valueFrom:
